@@ -13,6 +13,15 @@ from stats_collector import collect_all_stats, fetch_wp_stats, build_page_invent
 from indexing_checker import check_all_indexing
 from performance_checker import check_all_performance
 from manager_client import heartbeat, create_task, update_task, update_kpi, log_message
+from anomaly_detector import (
+    detect_traffic_anomalies,
+    detect_performance_anomalies,
+    generate_alerts,
+    get_anomaly_summary,
+)
+from report_generator import generate_weekly_report, format_report_text
+from agent_scorer import score_all_agents
+from forecaster import forecast_traffic, analyze_trends, get_kpi_dashboard
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("analytics-agent")
@@ -43,6 +52,11 @@ agent_state = {
     "indexing": None,
     "performance": None,
     "traffic_history": [],
+    # Phase 2D additions
+    "anomalies": None,
+    "weekly_reports": [],
+    "agent_scores": None,
+    "forecasts": None,
 }
 
 
@@ -61,6 +75,11 @@ def load_state():
                 agent_state["indexing"] = data.get("indexing")
                 agent_state["performance"] = data.get("performance")
                 agent_state["traffic_history"] = data.get("traffic_history", [])
+                # Phase 2D state
+                agent_state["anomalies"] = data.get("anomalies")
+                agent_state["weekly_reports"] = data.get("weekly_reports", [])
+                agent_state["agent_scores"] = data.get("agent_scores")
+                agent_state["forecasts"] = data.get("forecasts")
         except Exception:
             pass
 
@@ -78,6 +97,11 @@ def save_state():
             "indexing": agent_state["indexing"],
             "performance": agent_state["performance"],
             "traffic_history": agent_state["traffic_history"][-90:],
+            # Phase 2D state
+            "anomalies": agent_state["anomalies"],
+            "weekly_reports": agent_state["weekly_reports"][-12:],
+            "agent_scores": agent_state["agent_scores"],
+            "forecasts": agent_state["forecasts"],
         }, f, default=str)
 
 
@@ -94,6 +118,83 @@ async def send_heartbeat():
     if agent_state["performance"]:
         metrics["avg_response_time"] = agent_state["performance"].get("avg_response_time_ms", 0)
     await heartbeat("active", metrics)
+
+
+async def run_anomaly_detection():
+    """Run anomaly detection on current data."""
+    try:
+        logger.info("Running anomaly detection...")
+        traffic_anomalies = detect_traffic_anomalies(agent_state["traffic_history"])
+        perf_anomalies = detect_performance_anomalies(
+            agent_state["performance"],
+            agent_state["history"],
+        )
+        all_anomalies = traffic_anomalies + perf_anomalies
+        alerts = generate_alerts(all_anomalies)
+        summary = get_anomaly_summary(all_anomalies, alerts)
+        agent_state["anomalies"] = summary
+        save_state()
+        logger.info(
+            f"Anomaly detection complete: {summary['total_anomalies']} anomalies, "
+            f"{summary['critical_count']} critical"
+        )
+    except Exception as e:
+        logger.error(f"Anomaly detection failed: {e}")
+
+
+async def run_forecasting():
+    """Run traffic forecasting and trend analysis."""
+    try:
+        logger.info("Running forecasting...")
+        forecast = forecast_traffic(agent_state["traffic_history"])
+        trends = analyze_trends(agent_state["traffic_history"])
+        kpis = get_kpi_dashboard(
+            agent_state,
+            forecast=forecast,
+            trends=trends,
+            agent_scores=agent_state.get("agent_scores"),
+        )
+        agent_state["forecasts"] = {
+            "forecast": forecast,
+            "trends": trends,
+            "kpis": kpis,
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+        }
+        save_state()
+        logger.info("Forecasting complete")
+    except Exception as e:
+        logger.error(f"Forecasting failed: {e}")
+
+
+async def run_agent_scoring():
+    """Score all agents in the ecosystem."""
+    try:
+        logger.info("Running agent scoring...")
+        scores = await score_all_agents(agent_state)
+        agent_state["agent_scores"] = scores
+        save_state()
+        logger.info(
+            f"Agent scoring complete: overall {scores['overall_score']}/100 "
+            f"({scores['overall_grade']})"
+        )
+    except Exception as e:
+        logger.error(f"Agent scoring failed: {e}")
+
+
+async def run_weekly_report():
+    """Generate a weekly report."""
+    try:
+        logger.info("Generating weekly report...")
+        report = await generate_weekly_report(agent_state)
+        agent_state["weekly_reports"].append(report)
+        # Keep last 12 reports
+        agent_state["weekly_reports"] = agent_state["weekly_reports"][-12:]
+        save_state()
+        text = format_report_text(report)
+        await log_message("info", f"Weekly report generated: {len(report.get('recommendations', []))} recommendations")
+        logger.info("Weekly report generated")
+    except Exception as e:
+        logger.error(f"Weekly report generation failed: {e}")
 
 
 async def run_scheduled_collection():
@@ -167,6 +268,10 @@ async def run_scheduled_collection():
             f"{collection['traffic'].get('views_week', 0)} weekly views, "
             f"avg {perf.get('avg_response_time_ms', 0)}ms response"
         )
+
+        # Phase 2D: Run anomaly detection and forecasting after data collection
+        await run_anomaly_detection()
+        await run_forecasting()
 
     except Exception as e:
         logger.error(f"Collection failed: {e}")
@@ -248,9 +353,12 @@ async def lifespan(app: FastAPI):
     scheduler.add_job(send_heartbeat, "interval", seconds=settings.HEARTBEAT_INTERVAL, id="heartbeat")
     scheduler.add_job(run_scheduled_collection, "cron", hour=str(settings.COLLECTION_HOUR), id="daily_collection")
     scheduler.add_job(run_scheduled_indexing, "cron", day_of_week="mon", hour="5", id="weekly_indexing")
+    # Phase 2D scheduled jobs
+    scheduler.add_job(run_weekly_report, "cron", day_of_week="sun", hour="8", id="weekly_report")
+    scheduler.add_job(run_agent_scoring, "interval", hours=6, id="agent_scoring")
     scheduler.start()
     await send_heartbeat()
-    await log_message("info", "Analytics Agent started")
+    await log_message("info", "Analytics Agent started (Phase 2D)")
     logger.info("Analytics Agent started on port %d", settings.API_PORT)
     yield
     scheduler.shutdown()
@@ -259,7 +367,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="PetHub Analytics Agent",
     description="Site analytics, performance monitoring, and indexing tracking for pethubonline.com",
-    version="1.0.0",
+    version="2.0.0",
     lifespan=lifespan,
     root_path="/agents/analytics"
 )
@@ -281,6 +389,9 @@ async def get_status():
         "indexable_count": agent_state["indexing"].get("indexable_count", 0) if agent_state["indexing"] else 0,
         "avg_response_time_ms": agent_state["performance"].get("avg_response_time_ms", 0) if agent_state["performance"] else 0,
         "history_count": len(agent_state["history"]),
+        "anomaly_status": agent_state["anomalies"].get("status", "unknown") if agent_state["anomalies"] else "unknown",
+        "agent_score": agent_state["agent_scores"].get("overall_score", 0) if agent_state["agent_scores"] else 0,
+        "weekly_reports_count": len(agent_state["weekly_reports"]),
     }
 
 
@@ -470,6 +581,129 @@ async def get_history():
         "traffic_history": agent_state["traffic_history"][-30:],
     }
 
+
+# ─── Phase 2D Endpoints ───────────────────────────────────────────────────────
+
+@app.get("/api/anomalies")
+async def get_anomalies():
+    """Current anomalies and alerts."""
+    if not agent_state["anomalies"]:
+        return {
+            "status": "unknown",
+            "total_anomalies": 0,
+            "critical_count": 0,
+            "warning_count": 0,
+            "info_count": 0,
+            "anomalies": [],
+            "alerts": [],
+            "message": "No anomaly data yet. Run a data collection first.",
+        }
+    return agent_state["anomalies"]
+
+
+@app.get("/api/reports")
+async def get_reports():
+    """List of weekly reports (metadata only for list view)."""
+    reports = agent_state.get("weekly_reports", [])
+    return {
+        "total": len(reports),
+        "reports": [
+            {
+                "index": i,
+                "generated_at": r.get("generated_at", ""),
+                "date_range": r.get("date_range", {}),
+                "traffic_views": r.get("traffic", {}).get("views_this_week", 0),
+                "recommendations_count": len(r.get("recommendations", [])),
+            }
+            for i, r in enumerate(reports)
+        ],
+    }
+
+
+@app.get("/api/reports/latest")
+async def get_latest_report():
+    """Latest weekly report."""
+    reports = agent_state.get("weekly_reports", [])
+    if not reports:
+        return {"message": "No reports generated yet. Reports are generated weekly on Sundays."}
+    report = reports[-1]
+    report["formatted_text"] = format_report_text(report)
+    return report
+
+
+@app.post("/api/reports/generate")
+async def trigger_report_generation():
+    """Trigger immediate report generation."""
+    import asyncio
+    asyncio.create_task(run_weekly_report())
+    return {"message": "Report generation started"}
+
+
+@app.get("/api/agents/scores")
+async def get_agent_scores():
+    """Agent performance scores."""
+    if not agent_state["agent_scores"]:
+        return {
+            "message": "No agent scores yet. Scores are computed every 6 hours.",
+            "agents": {},
+            "overall_score": 0,
+            "overall_grade": "N/A",
+        }
+    return agent_state["agent_scores"]
+
+
+@app.post("/api/agents/score")
+async def trigger_agent_scoring():
+    """Trigger immediate agent scoring."""
+    import asyncio
+    asyncio.create_task(run_agent_scoring())
+    return {"message": "Agent scoring started"}
+
+
+@app.get("/api/forecast")
+async def get_forecast():
+    """Traffic forecast."""
+    forecasts = agent_state.get("forecasts")
+    if not forecasts or not forecasts.get("forecast"):
+        return {
+            "message": "No forecast data yet. Run a data collection first.",
+            "predictions": [],
+            "trend_slope": 0,
+            "confidence": "unknown",
+        }
+    return forecasts["forecast"]
+
+
+@app.get("/api/trends")
+async def get_trends():
+    """Trend analysis."""
+    forecasts = agent_state.get("forecasts")
+    if not forecasts or not forecasts.get("trends"):
+        return {
+            "message": "No trend data yet. Run a data collection first.",
+            "direction": "unknown",
+            "growth_rate_pct": 0,
+        }
+    return forecasts["trends"]
+
+
+@app.get("/api/kpis")
+async def get_kpis():
+    """KPI dashboard."""
+    forecasts = agent_state.get("forecasts")
+    if not forecasts or not forecasts.get("kpis"):
+        # Generate live KPIs
+        kpis = get_kpi_dashboard(
+            agent_state,
+            forecast=forecasts.get("forecast") if forecasts else None,
+            trends=forecasts.get("trends") if forecasts else None,
+            agent_scores=agent_state.get("agent_scores"),
+        )
+        return kpis
+    return forecasts["kpis"]
+
+
+# ─── Dashboard ─────────────────────────────────────────────────────────────────
 
 @app.get("/", response_class=HTMLResponse)
 async def analytics_dashboard():

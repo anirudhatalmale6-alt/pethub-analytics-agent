@@ -37,6 +37,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .btn-primary:disabled{background:#1e2740;color:#64748b;cursor:not-allowed}
 .btn-secondary{background:#1e2740;color:#a78bfa;border:1px solid #2d3a55}
 .btn-secondary:hover{background:#2d3a55}
+.btn-sm{padding:6px 14px;font-size:12px}
 
 /* Tabs */
 .tabs{display:flex;gap:4px;margin-bottom:20px;background:#131929;padding:4px;border-radius:10px;width:fit-content;flex-wrap:wrap}
@@ -59,13 +60,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 /* Badges */
 .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700}
-.badge.good{background:rgba(52,211,153,.15);color:#34d399}
+.badge.good,.badge.healthy{background:rgba(52,211,153,.15);color:#34d399}
 .badge.warning{background:rgba(251,191,36,.15);color:#fbbf24}
 .badge.critical{background:rgba(248,113,113,.15);color:#f87171}
 .badge.yes{background:rgba(52,211,153,.15);color:#34d399}
 .badge.no{background:rgba(248,113,113,.15);color:#f87171}
 .badge.stale{background:rgba(248,113,113,.12);color:#f87171}
 .badge.fresh{background:rgba(52,211,153,.12);color:#34d399}
+.badge.info{background:rgba(96,165,250,.15);color:#60a5fa}
+.badge.unknown{background:rgba(148,163,184,.15);color:#94a3b8}
 
 /* Issue tag */
 .issue-tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;margin:2px;background:rgba(248,113,113,.12);color:#f87171}
@@ -85,7 +88,53 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 /* Two-col layout */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:900px){.grid-2{grid-template-columns:1fr}}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px}
+@media(max-width:1100px){.grid-3,.grid-4{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.grid-2{grid-template-columns:1fr}.grid-3,.grid-4{grid-template-columns:1fr}}
+
+/* Score card */
+.score-card{background:linear-gradient(135deg,#131929,#1a2035);border:1px solid #1e2740;border-radius:12px;padding:24px;text-align:center;transition:border-color .2s}
+.score-card:hover{border-color:#818cf8}
+.score-card .agent-name{font-size:14px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.score-card .score-number{font-size:48px;font-weight:800;margin-bottom:4px}
+.score-card .score-grade{font-size:20px;font-weight:700;margin-bottom:12px}
+.score-card .score-detail{font-size:11px;color:#64748b;margin-top:4px}
+.score-a{color:#34d399}
+.score-b{color:#60a5fa}
+.score-c{color:#fbbf24}
+.score-d{color:#f87171}
+
+/* Alert item */
+.alert-item{background:#131929;border:1px solid #1e2740;border-radius:10px;padding:16px;margin-bottom:12px;display:flex;gap:12px;align-items:flex-start}
+.alert-item .alert-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.alert-item .alert-body{flex:1}
+.alert-item .alert-message{font-size:13px;color:#e2e8f0;margin-bottom:4px}
+.alert-item .alert-time{font-size:11px;color:#64748b}
+.alert-item.critical{border-left:3px solid #f87171}
+.alert-item.warning{border-left:3px solid #fbbf24}
+.alert-item.info{border-left:3px solid #60a5fa}
+
+/* KPI metric */
+.kpi-metric{background:linear-gradient(135deg,#131929,#1a2035);border:1px solid #1e2740;border-radius:12px;padding:20px}
+.kpi-metric .kpi-label{font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.kpi-metric .kpi-value{font-size:32px;font-weight:700;color:#f1f5f9}
+.kpi-metric .kpi-sub{font-size:12px;color:#64748b;margin-top:4px}
+.kpi-metric .kpi-trend{font-size:12px;font-weight:600;margin-top:4px}
+.kpi-metric .kpi-trend.up{color:#34d399}
+.kpi-metric .kpi-trend.down{color:#f87171}
+.kpi-metric .kpi-trend.stable{color:#94a3b8}
+
+/* Report section */
+.report-section{background:#131929;border:1px solid #1e2740;border-radius:12px;padding:20px;margin-bottom:16px}
+.report-section h3{font-size:15px;font-weight:600;color:#f1f5f9;margin-bottom:12px;border-bottom:1px solid #1e2740;padding-bottom:8px}
+.report-line{font-size:13px;color:#e2e8f0;padding:4px 0}
+.report-line .report-label{color:#94a3b8;display:inline-block;min-width:180px}
+.report-rec{padding:8px 12px;margin-bottom:8px;border-radius:8px;font-size:13px}
+.report-rec.high{background:rgba(248,113,113,.08);border-left:3px solid #f87171;color:#fca5a5}
+.report-rec.critical{background:rgba(248,113,113,.12);border-left:3px solid #f87171;color:#fca5a5}
+.report-rec.medium{background:rgba(251,191,36,.08);border-left:3px solid #fbbf24;color:#fde68a}
+.report-rec.low,.report-rec.info{background:rgba(96,165,250,.08);border-left:3px solid #60a5fa;color:#93c5fd}
 
 /* Responsive */
 @media(max-width:600px){
@@ -152,6 +201,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <button class="tab" onclick="showTab('indexing',this)">Indexing</button>
     <button class="tab" onclick="showTab('performance',this)">Performance</button>
     <button class="tab" onclick="showTab('freshness',this)">Freshness</button>
+    <button class="tab" onclick="showTab('anomalies',this)">Anomalies</button>
+    <button class="tab" onclick="showTab('reports',this)">Reports</button>
+    <button class="tab" onclick="showTab('agent-scores',this)">Agent Scores</button>
+    <button class="tab" onclick="showTab('forecast',this)">Forecast</button>
+    <button class="tab" onclick="showTab('kpis',this)">KPIs</button>
     <button class="tab" onclick="showTab('history',this)">History</button>
   </div>
 
@@ -270,6 +324,96 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     </div>
   </div>
 
+  <!-- Anomalies Panel -->
+  <div id="anomalies" class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h2 style="font-size:18px;font-weight:600;color:#f1f5f9">Anomaly Detection</h2>
+      <div id="anomaly-status-badge"></div>
+    </div>
+    <div class="grid-2" style="margin-bottom:20px">
+      <div class="chart-card">
+        <h3>Anomaly Timeline</h3>
+        <div class="chart-wrapper"><canvas id="anomaly-chart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Alert Distribution</h3>
+        <div class="chart-wrapper"><canvas id="alert-dist-chart"></canvas></div>
+      </div>
+    </div>
+    <div class="section">
+      <h2>Active Alerts</h2>
+      <div id="alerts-list"></div>
+    </div>
+  </div>
+
+  <!-- Reports Panel -->
+  <div id="reports" class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h2 style="font-size:18px;font-weight:600;color:#f1f5f9">Weekly Reports</h2>
+      <button class="btn btn-primary btn-sm" onclick="generateReport()">Generate Report Now</button>
+    </div>
+    <div id="latest-report-content"></div>
+    <div class="section" style="margin-top:24px">
+      <h2>Past Reports</h2>
+      <table class="results-table">
+        <thead><tr><th>Date</th><th>Period</th><th>Views</th><th>Recommendations</th></tr></thead>
+        <tbody id="reports-list-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Agent Scores Panel -->
+  <div id="agent-scores" class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h2 style="font-size:18px;font-weight:600;color:#f1f5f9">Agent Ecosystem Health</h2>
+      <button class="btn btn-secondary btn-sm" onclick="triggerScoring()">Refresh Scores</button>
+    </div>
+    <div id="ecosystem-overview" style="margin-bottom:20px"></div>
+    <div class="grid-4" id="agent-score-cards"></div>
+    <div class="section" style="margin-top:24px">
+      <h2>Score Breakdown</h2>
+      <div class="chart-card">
+        <div class="chart-wrapper"><canvas id="scores-chart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forecast Panel -->
+  <div id="forecast" class="panel">
+    <div class="grid-2" style="margin-bottom:20px">
+      <div class="chart-card">
+        <h3>Traffic Forecast (7-day)</h3>
+        <div class="chart-wrapper" style="height:300px"><canvas id="forecast-chart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Trend Summary</h3>
+        <div id="trend-summary" style="padding:8px"></div>
+      </div>
+    </div>
+    <div class="section">
+      <h2>Day-of-Week Analysis</h2>
+      <div class="chart-card">
+        <div class="chart-wrapper"><canvas id="dow-chart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPIs Panel -->
+  <div id="kpis" class="panel">
+    <h2 style="font-size:18px;font-weight:600;color:#f1f5f9;margin-bottom:20px">Key Performance Indicators</h2>
+    <div class="grid-3" id="kpi-cards" style="margin-bottom:24px"></div>
+    <div class="grid-2">
+      <div class="chart-card">
+        <h3>KPI Radar</h3>
+        <div class="chart-wrapper"><canvas id="kpi-radar-chart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Performance Breakdown</h3>
+        <div class="chart-wrapper"><canvas id="kpi-bar-chart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
   <!-- History Panel -->
   <div id="history" class="panel">
     <div class="chart-card" style="margin-bottom:20px">
@@ -319,6 +463,20 @@ function fmtDate(d) {
 async function api(path) {
   const r = await fetch(API + path);
   return r.json();
+}
+
+function gradeColor(grade) {
+  if (grade === 'A') return '#34d399';
+  if (grade === 'B') return '#60a5fa';
+  if (grade === 'C') return '#fbbf24';
+  return '#f87171';
+}
+
+function gradeClass(grade) {
+  if (grade === 'A') return 'score-a';
+  if (grade === 'B') return 'score-b';
+  if (grade === 'C') return 'score-c';
+  return 'score-d';
 }
 
 // ── Status ──
@@ -711,6 +869,513 @@ async function loadFreshness() {
   </tr>`).join('');
 }
 
+// ── Anomalies ──
+async function loadAnomalies() {
+  const d = await api('/anomalies');
+  const statusBadge = document.getElementById('anomaly-status-badge');
+  const alertsList = document.getElementById('alerts-list');
+
+  const status = d.status || 'unknown';
+  statusBadge.innerHTML = `<span class="badge ${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>`;
+
+  // Alert distribution chart
+  if (charts.alertDist) charts.alertDist.destroy();
+  charts.alertDist = new Chart(document.getElementById('alert-dist-chart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Critical', 'Warning', 'Info'],
+      datasets: [{
+        data: [d.critical_count || 0, d.warning_count || 0, d.info_count || 0],
+        backgroundColor: ['rgba(248,113,113,0.8)', 'rgba(251,191,36,0.8)', 'rgba(96,165,250,0.8)'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 16 } } }
+    }
+  });
+
+  // Anomaly timeline chart
+  const anomalies = d.anomalies || [];
+  if (anomalies.length > 0) {
+    const timeLabels = anomalies.map((a, i) => (a.date || a.detected_at || '').substring(5, 10) || '#' + (i + 1));
+    const values = anomalies.map(a => a.value || 0);
+    const colors = anomalies.map(a => a.severity === 'critical' ? 'rgba(248,113,113,0.8)' : a.severity === 'warning' ? 'rgba(251,191,36,0.8)' : 'rgba(96,165,250,0.8)');
+
+    if (charts.anomalyTimeline) charts.anomalyTimeline.destroy();
+    charts.anomalyTimeline = new Chart(document.getElementById('anomaly-chart'), {
+      type: 'bar',
+      data: {
+        labels: timeLabels,
+        datasets: [{
+          label: 'Anomaly Value',
+          data: values,
+          backgroundColor: colors,
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: '#1e2740' } },
+          y: { ticks: { color: '#64748b' }, grid: { color: '#1e2740' }, beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  // Alerts list
+  const alerts = d.alerts || [];
+  if (alerts.length === 0) {
+    alertsList.innerHTML = '<div class="empty">No active alerts. Your site is running smoothly.</div>';
+  } else {
+    alertsList.innerHTML = alerts.map(a => {
+      const icon = a.severity === 'critical' ? '!!' : a.severity === 'warning' ? '!' : 'i';
+      return `<div class="alert-item ${a.severity}">
+        <div class="alert-icon" style="color:${a.severity === 'critical' ? '#f87171' : a.severity === 'warning' ? '#fbbf24' : '#60a5fa'};font-weight:900;font-size:16px">[${icon}]</div>
+        <div class="alert-body">
+          <div class="alert-message">${a.message}</div>
+          <div class="alert-time">${a.type} - ${timeAgo(a.timestamp)}</div>
+        </div>
+        <span class="badge ${a.severity}">${a.severity}</span>
+      </div>`;
+    }).join('');
+  }
+}
+
+// ── Reports ──
+async function loadReports() {
+  // Load latest report
+  const latest = await api('/reports/latest');
+  const container = document.getElementById('latest-report-content');
+
+  if (latest.message && !latest.traffic) {
+    container.innerHTML = `<div class="empty">${latest.message}</div>`;
+  } else {
+    const t = latest.traffic || {};
+    const p = latest.performance || {};
+    const idx = latest.indexing || {};
+    const recs = latest.recommendations || [];
+
+    let html = `
+      <div class="report-section">
+        <h3>Traffic Summary</h3>
+        <div class="report-line"><span class="report-label">Views this week:</span> <strong>${(t.views_this_week || 0).toLocaleString()}</strong></div>
+        <div class="report-line"><span class="report-label">Views last week:</span> ${(t.views_last_week || 0).toLocaleString()}</div>
+        <div class="report-line"><span class="report-label">Change:</span> <span style="color:${(t.change_pct || 0) >= 0 ? '#34d399' : '#f87171'}">${(t.change_pct || 0) > 0 ? '+' : ''}${t.change_pct || 0}%</span> (${t.trend || 'unknown'})</div>
+        <div class="report-line"><span class="report-label">Visitors this week:</span> ${(t.visitors_this_week || 0).toLocaleString()}</div>
+      </div>
+    `;
+
+    if (latest.top_pages && latest.top_pages.length) {
+      html += `<div class="report-section"><h3>Top Pages</h3>`;
+      latest.top_pages.forEach((pg, i) => {
+        html += `<div class="report-line">${i + 1}. ${pg.title || pg.url} - ${(pg.views || 0).toLocaleString()} views</div>`;
+      });
+      html += `</div>`;
+    }
+
+    if (p.avg_response_time_ms !== undefined) {
+      html += `
+        <div class="report-section">
+          <h3>Performance</h3>
+          <div class="report-line"><span class="report-label">Avg response time:</span> ${p.avg_response_time_ms}ms</div>
+          <div class="report-line"><span class="report-label">Good / Warn / Critical:</span> ${p.good_count || 0} / ${p.warning_count || 0} / ${p.critical_count || 0}</div>
+        </div>
+      `;
+    }
+
+    if (idx.total_pages !== undefined) {
+      html += `
+        <div class="report-section">
+          <h3>Indexing</h3>
+          <div class="report-line"><span class="report-label">Indexable:</span> ${idx.indexable_count || 0} / ${idx.total_pages || 0} (${idx.coverage_pct || 0}%)</div>
+          <div class="report-line"><span class="report-label">Issues:</span> ${idx.total_issues || 0}</div>
+        </div>
+      `;
+    }
+
+    // Agent statuses in report
+    const agents = ['seo', 'social', 'maintenance'];
+    let agentHtml = '<div class="report-section"><h3>Agent Statuses</h3>';
+    agents.forEach(name => {
+      const ag = latest[name] || {};
+      const st = ag.status || 'unknown';
+      const badgeClass = st === 'unreachable' ? 'critical' : st === 'idle' || st === 'active' ? 'good' : 'warning';
+      agentHtml += `<div class="report-line"><span class="report-label">${name.toUpperCase()} Agent:</span> <span class="badge ${badgeClass}">${st}</span></div>`;
+    });
+    agentHtml += '</div>';
+    html += agentHtml;
+
+    if (recs.length) {
+      html += `<div class="report-section"><h3>Recommendations</h3>`;
+      recs.forEach(r => {
+        html += `<div class="report-rec ${r.priority}">[${(r.priority || 'info').toUpperCase()}] ${r.recommendation}</div>`;
+      });
+      html += `</div>`;
+    }
+
+    html += `<div style="font-size:11px;color:#64748b;margin-top:12px">Generated: ${fmtDate(latest.generated_at)}</div>`;
+    container.innerHTML = html;
+  }
+
+  // Load reports list
+  const list = await api('/reports');
+  const tbody = document.getElementById('reports-list-body');
+  const reports = (list.reports || []).slice().reverse();
+  if (!reports.length) {
+    tbody.innerHTML = '<tr><td colspan="4" class="empty">No reports yet</td></tr>';
+  } else {
+    tbody.innerHTML = reports.map(r => `<tr>
+      <td>${fmtDate(r.generated_at)}</td>
+      <td>${r.date_range ? fmtDate(r.date_range.start) + ' - ' + fmtDate(r.date_range.end) : '-'}</td>
+      <td style="font-weight:600">${(r.traffic_views || 0).toLocaleString()}</td>
+      <td>${r.recommendations_count || 0}</td>
+    </tr>`).join('');
+  }
+}
+
+// ── Agent Scores ──
+async function loadAgentScores() {
+  const d = await api('/agents/scores');
+  const overview = document.getElementById('ecosystem-overview');
+  const cardsEl = document.getElementById('agent-score-cards');
+
+  if (!d.agents || !Object.keys(d.agents).length) {
+    overview.innerHTML = '<div class="empty">No agent scores yet. Scores are computed every 6 hours.</div>';
+    cardsEl.innerHTML = '';
+    return;
+  }
+
+  const overallGrade = d.overall_grade || 'N/A';
+  const overallScore = d.overall_score || 0;
+  overview.innerHTML = `
+    <div style="display:flex;align-items:center;gap:20px;background:#131929;border:1px solid #1e2740;border-radius:12px;padding:20px">
+      <div style="text-align:center;min-width:100px">
+        <div style="font-size:48px;font-weight:800;color:${gradeColor(overallGrade)}">${overallGrade}</div>
+        <div style="font-size:14px;color:#94a3b8">Overall</div>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:16px;font-weight:600;color:#f1f5f9;margin-bottom:8px">Ecosystem Health Score: ${overallScore}/100</div>
+        <div style="font-size:13px;color:#94a3b8">${d.agents_online || 0} of ${d.agents_total || 4} agents online</div>
+        <div style="background:#1e2740;border-radius:6px;height:8px;margin-top:10px;overflow:hidden">
+          <div style="height:100%;width:${overallScore}%;background:${gradeColor(overallGrade)};border-radius:6px;transition:width .5s"></div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Agent score cards
+  const agents = d.agents || {};
+  cardsEl.innerHTML = Object.entries(agents).map(([name, s]) => {
+    const gc = gradeClass(s.grade);
+    return `<div class="score-card">
+      <div class="agent-name">${name}</div>
+      <div class="score-number ${gc}">${s.score}</div>
+      <div class="score-grade ${gc}">Grade ${s.grade}</div>
+      <div class="score-detail">Uptime: ${s.uptime_score}/25</div>
+      <div class="score-detail">Activity: ${s.activity_score}/25</div>
+      <div class="score-detail">Tasks: ${s.task_score}/25</div>
+      <div class="score-detail">Errors: ${s.error_score}/25</div>
+      <div style="margin-top:8px"><span class="badge ${s.status === 'active' || s.status === 'idle' ? 'good' : s.status === 'unreachable' ? 'critical' : 'warning'}">${s.status}</span></div>
+    </div>`;
+  }).join('');
+
+  // Scores bar chart
+  if (charts.scores) charts.scores.destroy();
+  const agentNames = Object.keys(agents);
+  const categories = ['uptime_score', 'activity_score', 'task_score', 'error_score'];
+  const catLabels = ['Uptime', 'Activity', 'Tasks', 'Errors'];
+  const catColors = ['rgba(52,211,153,0.7)', 'rgba(96,165,250,0.7)', 'rgba(167,139,250,0.7)', 'rgba(251,191,36,0.7)'];
+
+  charts.scores = new Chart(document.getElementById('scores-chart'), {
+    type: 'bar',
+    data: {
+      labels: agentNames.map(n => n.charAt(0).toUpperCase() + n.slice(1)),
+      datasets: categories.map((cat, i) => ({
+        label: catLabels[i],
+        data: agentNames.map(n => agents[n][cat] || 0),
+        backgroundColor: catColors[i],
+        borderRadius: 4,
+      }))
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#94a3b8' } } },
+      scales: {
+        x: { stacked: true, ticks: { color: '#94a3b8' }, grid: { color: '#1e2740' } },
+        y: { stacked: true, ticks: { color: '#64748b' }, grid: { color: '#1e2740' }, max: 100 }
+      }
+    }
+  });
+}
+
+// ── Forecast ──
+async function loadForecast() {
+  const forecast = await api('/forecast');
+  const trends = await api('/trends');
+
+  // Forecast chart - combine historical + predicted
+  const trafficData = await api('/traffic');
+  const hist = trafficData.history || [];
+  const preds = forecast.predictions || [];
+
+  if (hist.length > 0 || preds.length > 0) {
+    const histLabels = hist.map(h => {
+      const dt = new Date(h.date);
+      return (dt.getMonth() + 1) + '/' + dt.getDate();
+    });
+    const histViews = hist.map(h => h.views_today || h.views_week || 0);
+    const predLabels = preds.map(p => {
+      const parts = p.date.split('-');
+      return parseInt(parts[1]) + '/' + parseInt(parts[2]);
+    });
+    const predViews = preds.map(p => p.predicted_views);
+
+    const allLabels = [...histLabels, ...predLabels];
+    const actualData = [...histViews, ...new Array(predLabels.length).fill(null)];
+    const forecastData = [...new Array(histLabels.length > 0 ? histLabels.length - 1 : 0).fill(null), histViews.length > 0 ? histViews[histViews.length - 1] : null, ...predViews];
+
+    if (charts.forecast) charts.forecast.destroy();
+    charts.forecast = new Chart(document.getElementById('forecast-chart'), {
+      type: 'line',
+      data: {
+        labels: allLabels,
+        datasets: [
+          {
+            label: 'Actual',
+            data: actualData,
+            borderColor: '#a78bfa',
+            backgroundColor: 'rgba(167,139,250,0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 3,
+          },
+          {
+            label: 'Forecast',
+            data: forecastData,
+            borderColor: '#818cf8',
+            borderDash: [6, 4],
+            backgroundColor: 'rgba(129,140,248,0.05)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 3,
+            pointStyle: 'triangle',
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: '#94a3b8' } } },
+        scales: {
+          x: { ticks: { color: '#64748b' }, grid: { color: '#1e2740' } },
+          y: { ticks: { color: '#64748b' }, grid: { color: '#1e2740' }, beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  // Trend summary
+  const trendEl = document.getElementById('trend-summary');
+  const dir = trends.direction || 'unknown';
+  const dirColor = dir === 'growing' ? '#34d399' : dir === 'declining' ? '#f87171' : '#94a3b8';
+  const confColor = forecast.confidence === 'high' ? '#34d399' : forecast.confidence === 'medium' ? '#fbbf24' : '#f87171';
+
+  trendEl.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="background:#0b0f1a;border-radius:8px;padding:16px">
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">DIRECTION</div>
+        <div style="font-size:20px;font-weight:700;color:${dirColor}">${dir.charAt(0).toUpperCase() + dir.slice(1)}</div>
+      </div>
+      <div style="background:#0b0f1a;border-radius:8px;padding:16px">
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">WEEKLY GROWTH</div>
+        <div style="font-size:20px;font-weight:700;color:${(trends.growth_rate_pct || 0) >= 0 ? '#34d399' : '#f87171'}">${(trends.growth_rate_pct || 0) > 0 ? '+' : ''}${trends.growth_rate_pct || 0}%</div>
+      </div>
+      <div style="background:#0b0f1a;border-radius:8px;padding:16px">
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">FORECAST CONFIDENCE</div>
+        <div style="font-size:20px;font-weight:700;color:${confColor}">${(forecast.confidence || 'unknown').charAt(0).toUpperCase() + (forecast.confidence || 'unknown').slice(1)}</div>
+      </div>
+      <div style="background:#0b0f1a;border-radius:8px;padding:16px">
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">PROJECTED WEEK</div>
+        <div style="font-size:20px;font-weight:700;color:#a78bfa">${(forecast.projected_week_total || 0).toLocaleString()}</div>
+      </div>
+      <div style="background:#0b0f1a;border-radius:8px;padding:16px">
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">AVG DAILY VIEWS</div>
+        <div style="font-size:20px;font-weight:700;color:#60a5fa">${(trends.avg_daily_views || forecast.current_avg_daily || 0).toLocaleString()}</div>
+      </div>
+      <div style="background:#0b0f1a;border-radius:8px;padding:16px">
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">BEST DAY</div>
+        <div style="font-size:20px;font-weight:700;color:#22d3ee">${trends.best_day_of_week || '-'}</div>
+      </div>
+    </div>
+    ${(trends.patterns || []).length ? '<div style="margin-top:12px">' + trends.patterns.map(p => '<div style="font-size:12px;color:#94a3b8;padding:4px 0">* ' + p + '</div>').join('') + '</div>' : ''}
+  `;
+
+  // Day of week chart
+  const dayAvgs = trends.day_averages || {};
+  if (Object.keys(dayAvgs).length) {
+    const orderedDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const filteredDays = orderedDays.filter(d => dayAvgs[d] !== undefined);
+    if (charts.dow) charts.dow.destroy();
+    charts.dow = new Chart(document.getElementById('dow-chart'), {
+      type: 'bar',
+      data: {
+        labels: filteredDays.map(d => d.substring(0, 3)),
+        datasets: [{
+          label: 'Avg Views',
+          data: filteredDays.map(d => dayAvgs[d] || 0),
+          backgroundColor: filteredDays.map(d => d === trends.best_day_of_week ? 'rgba(52,211,153,0.8)' : 'rgba(129,140,248,0.5)'),
+          borderRadius: 6,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e2740' } },
+          y: { ticks: { color: '#64748b' }, grid: { color: '#1e2740' }, beginAtZero: true }
+        }
+      }
+    });
+  }
+}
+
+// ── KPIs ──
+async function loadKPIs() {
+  const d = await api('/kpis');
+  const cardsEl = document.getElementById('kpi-cards');
+
+  const t = d.traffic || {};
+  const p = d.performance || {};
+  const idx = d.indexing || {};
+  const eco = d.ecosystem || {};
+  const fc = d.forecast || {};
+  const tr = d.trends || {};
+
+  const wowChange = t.wow_change_pct || 0;
+  const wowClass = wowChange > 0 ? 'up' : wowChange < 0 ? 'down' : 'stable';
+  const wowArrow = wowChange > 0 ? '+' : '';
+
+  cardsEl.innerHTML = `
+    <div class="kpi-metric">
+      <div class="kpi-label">Weekly Views</div>
+      <div class="kpi-value" style="color:#a78bfa">${(t.views_week || 0).toLocaleString()}</div>
+      <div class="kpi-trend ${wowClass}">${wowArrow}${wowChange}% week-over-week</div>
+    </div>
+    <div class="kpi-metric">
+      <div class="kpi-label">Weekly Visitors</div>
+      <div class="kpi-value" style="color:#60a5fa">${(t.visitors_week || 0).toLocaleString()}</div>
+      <div class="kpi-sub">Today: ${(t.views_today || 0).toLocaleString()}</div>
+    </div>
+    <div class="kpi-metric">
+      <div class="kpi-label">Monthly Views</div>
+      <div class="kpi-value" style="color:#22d3ee">${(t.views_month || 0).toLocaleString()}</div>
+    </div>
+    <div class="kpi-metric">
+      <div class="kpi-label">Avg Response Time</div>
+      <div class="kpi-value" style="color:${p.avg_response_time_ms > 2500 ? '#f87171' : p.avg_response_time_ms > 1000 ? '#fbbf24' : '#34d399'}">${p.avg_response_time_ms || 0}ms</div>
+      <div class="kpi-sub">${p.good_pages_pct || 0}% pages good</div>
+    </div>
+    <div class="kpi-metric">
+      <div class="kpi-label">Indexing Coverage</div>
+      <div class="kpi-value" style="color:${(idx.coverage_pct || 0) >= 90 ? '#34d399' : (idx.coverage_pct || 0) >= 70 ? '#fbbf24' : '#f87171'}">${idx.coverage_pct || 0}%</div>
+      <div class="kpi-sub">${idx.indexable || 0} / ${idx.total_pages || 0} pages</div>
+    </div>
+    <div class="kpi-metric">
+      <div class="kpi-label">Ecosystem Health</div>
+      <div class="kpi-value" style="color:${gradeColor(eco.grade || 'D')}">${eco.grade || 'N/A'}</div>
+      <div class="kpi-sub">Score: ${eco.score || 0}/100</div>
+    </div>
+    <div class="kpi-metric">
+      <div class="kpi-label">Traffic Trend</div>
+      <div class="kpi-value" style="font-size:22px;color:${tr.direction === 'growing' ? '#34d399' : tr.direction === 'declining' ? '#f87171' : '#94a3b8'}">${(tr.direction || 'unknown').charAt(0).toUpperCase() + (tr.direction || 'unknown').slice(1)}</div>
+      <div class="kpi-sub">${(tr.growth_rate_pct || 0) > 0 ? '+' : ''}${tr.growth_rate_pct || 0}% per week</div>
+    </div>
+    <div class="kpi-metric">
+      <div class="kpi-label">Forecast Confidence</div>
+      <div class="kpi-value" style="font-size:22px;color:${fc.trend === 'high' ? '#34d399' : fc.trend === 'medium' ? '#fbbf24' : '#f87171'}">${(fc.trend || 'unknown').charAt(0).toUpperCase() + (fc.trend || 'unknown').slice(1)}</div>
+      <div class="kpi-sub">Projected: ${(fc.projected_week_total || 0).toLocaleString()}</div>
+    </div>
+    <div class="kpi-metric">
+      <div class="kpi-label">Performance Issues</div>
+      <div class="kpi-value" style="color:${(p.total_issues || 0) > 10 ? '#f87171' : (p.total_issues || 0) > 0 ? '#fbbf24' : '#34d399'}">${p.total_issues || 0}</div>
+    </div>
+  `;
+
+  // KPI Radar chart
+  if (charts.kpiRadar) charts.kpiRadar.destroy();
+  charts.kpiRadar = new Chart(document.getElementById('kpi-radar-chart'), {
+    type: 'radar',
+    data: {
+      labels: ['Traffic', 'Performance', 'Indexing', 'Ecosystem', 'Forecast'],
+      datasets: [{
+        label: 'Current Status',
+        data: [
+          Math.min(100, (t.views_week || 0) / 10),
+          p.good_pages_pct || 0,
+          idx.coverage_pct || 0,
+          eco.score || 0,
+          fc.trend === 'high' ? 90 : fc.trend === 'medium' ? 60 : 30,
+        ],
+        borderColor: '#a78bfa',
+        backgroundColor: 'rgba(167,139,250,0.15)',
+        pointBackgroundColor: '#a78bfa',
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#94a3b8' } } },
+      scales: {
+        r: {
+          angleLines: { color: '#1e2740' },
+          grid: { color: '#1e2740' },
+          pointLabels: { color: '#94a3b8' },
+          ticks: { color: '#64748b', backdropColor: 'transparent' },
+          min: 0,
+          max: 100,
+        }
+      }
+    }
+  });
+
+  // KPI breakdown bar chart
+  if (charts.kpiBar) charts.kpiBar.destroy();
+  charts.kpiBar = new Chart(document.getElementById('kpi-bar-chart'), {
+    type: 'bar',
+    data: {
+      labels: ['Traffic Score', 'Perf Good %', 'Indexing %', 'Ecosystem'],
+      datasets: [{
+        label: 'Score',
+        data: [
+          Math.min(100, (t.views_week || 0) / 10),
+          p.good_pages_pct || 0,
+          idx.coverage_pct || 0,
+          eco.score || 0,
+        ],
+        backgroundColor: ['rgba(167,139,250,0.7)', 'rgba(52,211,153,0.7)', 'rgba(96,165,250,0.7)', 'rgba(251,191,36,0.7)'],
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e2740' } },
+        y: { ticks: { color: '#64748b' }, grid: { color: '#1e2740' }, beginAtZero: true, max: 100 }
+      }
+    }
+  });
+}
+
 // ── History ──
 async function loadHistory() {
   const d = await api('/history');
@@ -780,6 +1445,16 @@ async function runIndexing() {
   setTimeout(loadAll, 2000);
 }
 
+async function generateReport() {
+  await fetch(API + '/reports/generate', { method: 'POST' });
+  setTimeout(() => loadReports(), 3000);
+}
+
+async function triggerScoring() {
+  await fetch(API + '/agents/score', { method: 'POST' });
+  setTimeout(() => loadAgentScores(), 3000);
+}
+
 // ── Main load ──
 async function loadAll() {
   try {
@@ -788,6 +1463,11 @@ async function loadAll() {
     await loadIndexing();
     await loadPerformance();
     await loadFreshness();
+    await loadAnomalies();
+    await loadReports();
+    await loadAgentScores();
+    await loadForecast();
+    await loadKPIs();
     await loadHistory();
   } catch (e) {
     console.error('Load failed:', e);

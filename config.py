@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     HEARTBEAT_INTERVAL: int = 120
     COLLECTION_HOUR: int = 4
     STALE_DAYS: int = 30
-    DB_PATH: str = "/opt/analytics-agent/data/analytics_data.json"
+    DB_PATH: str = "/var/lib/freelancer/projects/40416335/analytics-agent/data/analytics_data.json"
 
     class Config:
         env_file = ".env"
