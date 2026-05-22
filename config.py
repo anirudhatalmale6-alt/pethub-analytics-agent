@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     WP_URL: str = "https://pethubonline.com"
     WP_USER: str = "jasonsarah2026"
     WP_APP_PASSWORD: str = "EIul 3KqI 3fY7 yLbk Ltva aPnj"
+    OPENAI_API_KEY: str = ""
     GA4_TAG: str = "GT-KV6JDR72"
     HEARTBEAT_INTERVAL: int = 120
     COLLECTION_HOUR: int = 4

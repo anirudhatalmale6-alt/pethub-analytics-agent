@@ -210,6 +210,26 @@ async def generate_weekly_report(state: dict) -> dict:
 
     report["recommendations"] = recs
 
+    # Generate AI-powered natural language summary
+    try:
+        from ai_client import ai_generate_weekly_report
+        ai_summary = await ai_generate_weekly_report({
+            "traffic_views": report.get("traffic", {}).get("views_this_week", 0),
+            "traffic_change_pct": report.get("traffic", {}).get("change_pct", 0),
+            "traffic_trend": report.get("traffic", {}).get("trend", "unknown"),
+            "top_pages": [p.get("title", "") for p in report.get("top_pages", [])[:5]],
+            "seo_score": report.get("seo", {}).get("avg_score") if report.get("seo") else None,
+            "seo_issues": report.get("seo", {}).get("total_issues") if report.get("seo") else None,
+            "social_posts": report.get("social", {}).get("total_posts") if report.get("social") else None,
+            "maintenance_issues": report.get("maintenance", {}).get("link_issues") if report.get("maintenance") else None,
+            "recommendations_count": len(recs),
+        })
+        if ai_summary:
+            report["ai_summary"] = ai_summary
+            logger.info("AI summary generated for weekly report")
+    except Exception as e:
+        logger.debug(f"AI summary unavailable: {e}")
+
     return report
 
 
