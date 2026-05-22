@@ -351,11 +351,11 @@ async def run_scheduled_indexing():
 async def lifespan(app: FastAPI):
     load_state()
     scheduler.add_job(send_heartbeat, "interval", seconds=settings.HEARTBEAT_INTERVAL, id="heartbeat")
-    scheduler.add_job(run_scheduled_collection, "cron", hour=str(settings.COLLECTION_HOUR), id="daily_collection")
-    scheduler.add_job(run_scheduled_indexing, "cron", day_of_week="mon", hour="5", id="weekly_indexing")
+    scheduler.add_job(run_scheduled_collection, "cron", hour="6,18", id="twice_daily_collection")
+    scheduler.add_job(run_scheduled_indexing, "cron", day_of_week="mon,thu", hour="5", id="indexing_2x_week")
     # Phase 2D scheduled jobs
     scheduler.add_job(run_weekly_report, "cron", day_of_week="sun", hour="8", id="weekly_report")
-    scheduler.add_job(run_agent_scoring, "interval", hours=6, id="agent_scoring")
+    scheduler.add_job(run_agent_scoring, "interval", hours=4, id="agent_scoring")
     scheduler.start()
     await send_heartbeat()
     await log_message("info", "Analytics Agent started (Phase 2D)")

@@ -1,0 +1,359 @@
+INFO:     Started server process [2447383]
+INFO:     Waiting for application startup.
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Added job "send_heartbeat" to job store "default"
+INFO:apscheduler.scheduler:Added job "run_scheduled_collection" to job store "default"
+INFO:apscheduler.scheduler:Added job "run_scheduled_indexing" to job store "default"
+INFO:apscheduler.scheduler:Added job "run_weekly_report" to job store "default"
+INFO:apscheduler.scheduler:Added job "run_agent_scoring" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:analytics-agent:Analytics Agent started on port 8102
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8102 (Press CTRL+C to quit)
+INFO:     127.0.0.1:37108 - "GET /agents/analytics/api/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50474 - "GET /agents/analytics/api/anomalies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50480 - "GET /agents/analytics/api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50484 - "GET /agents/analytics/api/reports/latest HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50490 - "GET /agents/analytics/api/agents/scores HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50504 - "GET /agents/analytics/api/forecast HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50508 - "GET /agents/analytics/api/trends HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50520 - "GET /agents/analytics/api/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56158 - "POST /agents/analytics/api/reports/generate HTTP/1.1" 200 OK
+INFO:analytics-agent:Generating weekly report...
+INFO:httpx:HTTP Request: GET http://127.0.0.1:8101/agents/seo/api/status "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:56164 - "POST /agents/analytics/api/agents/score HTTP/1.1" 200 OK
+INFO:analytics-agent:Running agent scoring...
+INFO:httpx:HTTP Request: GET http://127.0.0.1:8103/agents/social/api/status "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET http://127.0.0.1:8101/agents/seo/api/status "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET http://127.0.0.1:8104/agents/maintenance/api/status "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: GET http://127.0.0.1:8103/agents/social/api/status "HTTP/1.1 200 OK"
+INFO:analytics-agent:Weekly report generated
+INFO:httpx:HTTP Request: GET http://127.0.0.1:8104/agents/maintenance/api/status "HTTP/1.1 200 OK"
+INFO:analytics-agent:Agent scoring complete: overall 62/100 (C)
+INFO:     127.0.0.1:56166 - "GET /agents/analytics/api/reports/latest HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56170 - "GET /agents/analytics/api/agents/scores HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38236 - "GET /agents/analytics/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33190 - "GET /agents/analytics/api/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33192 - "GET /agents/analytics/api/agents/scores HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/api/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/api/traffic HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/api/indexing HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/api/performance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/api/freshness HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/api/anomalies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/api/reports/latest HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/api/agents/scores HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/api/forecast HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/api/trends HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/api/traffic HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/api/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54674 - "GET /agents/analytics/api/history HTTP/1.1" 200 OK
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:20:56 UTC)" (scheduled at 2026-05-22 15:18:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:20:56 UTC)" executed successfully
+INFO:     127.0.0.1:46876 - "GET /api/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44814 - "GET /dashboard HTTP/1.1" 404 Not Found
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:22:56 UTC)" (scheduled at 2026-05-22 15:20:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:22:56 UTC)" executed successfully
+INFO:     127.0.0.1:48168 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48176 - "GET /agents/analytics/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48182 - "GET /dashboard HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48194 - "GET /agents/analytics/dashboard HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51966 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /api/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /api/traffic HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /api/indexing HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /api/performance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /api/freshness HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /api/anomalies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /api/reports/latest HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /api/reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /api/agents/scores HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /api/forecast HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /api/trends HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /api/traffic HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /api/kpis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /api/history HTTP/1.1" 200 OK
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:24:56 UTC)" (scheduled at 2026-05-22 15:22:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:24:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:26:56 UTC)" (scheduled at 2026-05-22 15:24:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:26:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:28:56 UTC)" (scheduled at 2026-05-22 15:26:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:28:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:30:56 UTC)" (scheduled at 2026-05-22 15:28:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:30:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:32:56 UTC)" (scheduled at 2026-05-22 15:30:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:32:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:34:56 UTC)" (scheduled at 2026-05-22 15:32:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:34:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:36:56 UTC)" (scheduled at 2026-05-22 15:34:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:36:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:38:56 UTC)" (scheduled at 2026-05-22 15:36:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:38:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:40:56 UTC)" (scheduled at 2026-05-22 15:38:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:40:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:42:56 UTC)" (scheduled at 2026-05-22 15:40:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:42:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:44:56 UTC)" (scheduled at 2026-05-22 15:42:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:44:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:46:56 UTC)" (scheduled at 2026-05-22 15:44:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:46:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:48:56 UTC)" (scheduled at 2026-05-22 15:46:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:48:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:50:56 UTC)" (scheduled at 2026-05-22 15:48:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:50:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:52:56 UTC)" (scheduled at 2026-05-22 15:50:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:52:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:54:56 UTC)" (scheduled at 2026-05-22 15:52:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:54:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:56:56 UTC)" (scheduled at 2026-05-22 15:54:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:56:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:58:56 UTC)" (scheduled at 2026-05-22 15:56:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 15:58:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:00:56 UTC)" (scheduled at 2026-05-22 15:58:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:00:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:02:56 UTC)" (scheduled at 2026-05-22 16:00:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:02:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:04:56 UTC)" (scheduled at 2026-05-22 16:02:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:04:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:06:56 UTC)" (scheduled at 2026-05-22 16:04:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:06:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:08:56 UTC)" (scheduled at 2026-05-22 16:06:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:08:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:10:56 UTC)" (scheduled at 2026-05-22 16:08:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:10:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:12:56 UTC)" (scheduled at 2026-05-22 16:10:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:12:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:14:56 UTC)" (scheduled at 2026-05-22 16:12:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:14:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:16:56 UTC)" (scheduled at 2026-05-22 16:14:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:16:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:18:56 UTC)" (scheduled at 2026-05-22 16:16:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:18:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:20:56 UTC)" (scheduled at 2026-05-22 16:18:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:20:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:22:56 UTC)" (scheduled at 2026-05-22 16:20:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:22:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:24:56 UTC)" (scheduled at 2026-05-22 16:22:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:24:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:26:56 UTC)" (scheduled at 2026-05-22 16:24:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:26:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:28:56 UTC)" (scheduled at 2026-05-22 16:26:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:28:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:30:56 UTC)" (scheduled at 2026-05-22 16:28:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:30:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:32:56 UTC)" (scheduled at 2026-05-22 16:30:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:32:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:34:56 UTC)" (scheduled at 2026-05-22 16:32:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:34:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:36:56 UTC)" (scheduled at 2026-05-22 16:34:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:36:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:38:56 UTC)" (scheduled at 2026-05-22 16:36:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:38:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:40:56 UTC)" (scheduled at 2026-05-22 16:38:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:40:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:42:56 UTC)" (scheduled at 2026-05-22 16:40:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:42:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:44:56 UTC)" (scheduled at 2026-05-22 16:42:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:44:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:46:56 UTC)" (scheduled at 2026-05-22 16:44:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:46:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:48:56 UTC)" (scheduled at 2026-05-22 16:46:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:48:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:50:56 UTC)" (scheduled at 2026-05-22 16:48:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:50:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:52:56 UTC)" (scheduled at 2026-05-22 16:50:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:52:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:54:56 UTC)" (scheduled at 2026-05-22 16:52:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:54:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:56:56 UTC)" (scheduled at 2026-05-22 16:54:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:56:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:58:56 UTC)" (scheduled at 2026-05-22 16:56:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 16:58:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:00:56 UTC)" (scheduled at 2026-05-22 16:58:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:00:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:02:56 UTC)" (scheduled at 2026-05-22 17:00:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:02:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:04:56 UTC)" (scheduled at 2026-05-22 17:02:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:04:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:06:56 UTC)" (scheduled at 2026-05-22 17:04:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:06:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:08:56 UTC)" (scheduled at 2026-05-22 17:06:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:08:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:10:56 UTC)" (scheduled at 2026-05-22 17:08:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:10:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:12:56 UTC)" (scheduled at 2026-05-22 17:10:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:12:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:14:56 UTC)" (scheduled at 2026-05-22 17:12:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:14:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:16:56 UTC)" (scheduled at 2026-05-22 17:14:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:16:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:18:56 UTC)" (scheduled at 2026-05-22 17:16:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:18:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:20:56 UTC)" (scheduled at 2026-05-22 17:18:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:20:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:22:56 UTC)" (scheduled at 2026-05-22 17:20:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:22:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:24:56 UTC)" (scheduled at 2026-05-22 17:22:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:24:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:26:56 UTC)" (scheduled at 2026-05-22 17:24:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:26:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:28:56 UTC)" (scheduled at 2026-05-22 17:26:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:28:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:30:56 UTC)" (scheduled at 2026-05-22 17:28:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:30:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:32:56 UTC)" (scheduled at 2026-05-22 17:30:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:32:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:34:56 UTC)" (scheduled at 2026-05-22 17:32:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:34:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:36:56 UTC)" (scheduled at 2026-05-22 17:34:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:36:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:38:56 UTC)" (scheduled at 2026-05-22 17:36:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:38:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:40:56 UTC)" (scheduled at 2026-05-22 17:38:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:40:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:42:56 UTC)" (scheduled at 2026-05-22 17:40:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:42:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:44:56 UTC)" (scheduled at 2026-05-22 17:42:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:44:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:46:56 UTC)" (scheduled at 2026-05-22 17:44:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:46:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:48:56 UTC)" (scheduled at 2026-05-22 17:46:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:48:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:50:56 UTC)" (scheduled at 2026-05-22 17:48:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:50:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:52:56 UTC)" (scheduled at 2026-05-22 17:50:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:52:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:54:56 UTC)" (scheduled at 2026-05-22 17:52:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:54:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:56:56 UTC)" (scheduled at 2026-05-22 17:54:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:56:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:58:56 UTC)" (scheduled at 2026-05-22 17:56:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 17:58:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:00:56 UTC)" (scheduled at 2026-05-22 17:58:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:00:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:02:56 UTC)" (scheduled at 2026-05-22 18:00:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:02:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:04:56 UTC)" (scheduled at 2026-05-22 18:02:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:04:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:06:56 UTC)" (scheduled at 2026-05-22 18:04:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:06:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:08:56 UTC)" (scheduled at 2026-05-22 18:06:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:08:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:10:56 UTC)" (scheduled at 2026-05-22 18:08:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:10:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:12:56 UTC)" (scheduled at 2026-05-22 18:10:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:12:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:14:56 UTC)" (scheduled at 2026-05-22 18:12:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:14:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:16:56 UTC)" (scheduled at 2026-05-22 18:14:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:16:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:18:56 UTC)" (scheduled at 2026-05-22 18:16:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:18:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:20:56 UTC)" (scheduled at 2026-05-22 18:18:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:20:56 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:22:56 UTC)" (scheduled at 2026-05-22 18:20:56.550716+00:00)
+ERROR:analytics-agent.manager:Heartbeat failed: All connection attempts failed
+INFO:apscheduler.executors.default:Job "send_heartbeat (trigger: interval[0:02:00], next run at: 2026-05-22 18:22:56 UTC)" executed successfully
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:apscheduler.scheduler:Scheduler has been shut down
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2447383]
