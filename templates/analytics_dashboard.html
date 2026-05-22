@@ -207,6 +207,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <button class="tab" onclick="showTab('forecast',this)">Forecast</button>
     <button class="tab" onclick="showTab('kpis',this)">KPIs</button>
     <button class="tab" onclick="showTab('history',this)">History</button>
+    <button class="tab" onclick="showTab('predictive',this)" style="color:#a855f7">Predictive Analytics</button>
   </div>
 
   <!-- Traffic Panel -->
@@ -430,6 +431,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   </div>
 </div>
 
+
+  <div id="predictive" class="tab-content" style="display:none"><div class="section"><h2>Loading Predictive Analytics...</h2></div></div>
 <script>
 const base = window.location.pathname.replace(/\/$/, '');
 const API = base + '/api';
@@ -1477,6 +1480,93 @@ async function loadAll() {
 loadAll();
 setInterval(loadAll, 60000);
 setInterval(loadStatus, 15000);
+
+
+// ── Predictive Analytics Tab ──
+async function loadPredictive() {
+  let html = '<div class="section"><h2>AI Predictive Analytics</h2>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">';
+  
+  // Forecast
+  try {
+    const fr = await fetch('/agents/analytics/api/predictive/forecast');
+    const fd = await fr.json();
+    html += '<div style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:20px"><h3 style="color:#3b82f6;margin-bottom:12px">Traffic Forecast</h3>';
+    if (fd.predictions && fd.predictions.length) {
+      fd.predictions.forEach(p => {
+        html += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #334155"><span style="color:#94a3b8">'+(p.date||p.day||'-')+'</span><span style="color:#22c55e;font-weight:600">'+(p.predicted_views||p.value||0).toLocaleString()+' views</span></div>';
+      });
+    } else {
+      html += '<span style="color:#94a3b8">Need more data for forecasting (7+ days)</span>';
+    }
+    html += '<div style="margin-top:8px;color:#64748b;font-size:12px">Confidence: '+(fd.confidence||'building')+'</div>';
+    html += '</div>';
+  } catch(e) {
+    html += '<div style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:20px"><h3 style="color:#3b82f6">Traffic Forecast</h3><span style="color:#94a3b8">Loading...</span></div>';
+  }
+  
+  // Anomalies
+  try {
+    const ar = await fetch('/agents/analytics/api/predictive/anomalies');
+    const ad = await ar.json();
+    html += '<div style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:20px"><h3 style="color:#ef4444;margin-bottom:12px">Multi-Metric Anomalies</h3>';
+    if (ad.anomalies && ad.anomalies.length) {
+      ad.anomalies.forEach(a => {
+        const sevColor = a.severity==='critical'?'#ef4444':a.severity==='warning'?'#f59e0b':'#3b82f6';
+        html += '<div style="padding:8px;border-left:3px solid '+sevColor+';margin-bottom:8px;background:#0f172a;border-radius:4px"><span style="color:'+sevColor+';font-weight:600">['+((a.severity||'info').toUpperCase())+']</span> <span style="color:#e2e8f0">'+(a.metric||'-')+': '+(a.description||a.message||'anomaly detected')+'</span></div>';
+      });
+    } else {
+      html += '<span style="color:#22c55e">No anomalies detected</span>';
+    }
+    html += '</div>';
+  } catch(e) {
+    html += '<div style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:20px"><h3 style="color:#ef4444">Anomalies</h3><span style="color:#94a3b8">Loading...</span></div>';
+  }
+  
+  html += '</div>';
+  
+  // Content ROI
+  try {
+    const cr = await fetch('/agents/analytics/api/predictive/content-roi');
+    const cd = await cr.json();
+    html += '<div style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:20px;margin-bottom:16px"><h3 style="color:#f59e0b;margin-bottom:12px">Content ROI Scores</h3>';
+    if (cd.content_roi && cd.content_roi.length) {
+      html += '<table class="results-table"><thead><tr><th>Content</th><th>Views</th><th>ROI Score</th></tr></thead><tbody>';
+      cd.content_roi.slice(0,10).forEach(c => {
+        html += '<tr><td>'+(c.title||c.url||'-')+'</td><td>'+(c.views||0).toLocaleString()+'</td><td style="color:#22c55e;font-weight:600">'+(c.roi_score||0).toFixed(2)+'</td></tr>';
+      });
+      html += '</tbody></table>';
+    } else {
+      html += '<span style="color:#94a3b8">Content ROI data builds as traffic is collected</span>';
+    }
+    html += '</div>';
+  } catch(e) {}
+  
+  // AI Insights button
+  html += '<button class="btn btn-primary" style="background:#8b5cf6" onclick="generateAIInsights()">Generate AI Insights</button>';
+  html += '<div id="ai-insights-result" style="margin-top:16px"></div>';
+  
+  html += '</div>';
+  document.getElementById('predictive').innerHTML = html;
+}
+
+async function generateAIInsights() {
+  document.getElementById('ai-insights-result').innerHTML = '<span style="color:#94a3b8">Generating AI insights...</span>';
+  const r = await fetch('/agents/analytics/api/predictive/insights', {method:'POST'});
+  const d = await r.json();
+  let html = '';
+  if (d.insights && d.insights.length) {
+    html += '<div style="background:#1e293b;border:1px solid #8b5cf6;border-radius:12px;padding:20px"><h3 style="color:#8b5cf6;margin-bottom:12px">AI-Generated Insights</h3>';
+    d.insights.forEach(i => {
+      html += '<div style="padding:8px;border-bottom:1px solid #334155;color:#e2e8f0">'+(i.insight||i)+'</div>';
+    });
+    html += '</div>';
+  } else {
+    html += '<span style="color:#94a3b8">No insights generated. Need more data.</span>';
+  }
+  document.getElementById('ai-insights-result').innerHTML = html;
+}
+
 </script>
 </body>
 </html>

@@ -79,7 +79,8 @@ def load_state():
                 agent_state["anomalies"] = data.get("anomalies")
                 agent_state["weekly_reports"] = data.get("weekly_reports", [])
                 agent_state["agent_scores"] = data.get("agent_scores")
-                agent_state["forecasts"] = data.get("forecasts")
+                agent_state[forecasts] = data.get(forecasts)
+                agent_state[predictive] = data.get(predictive)
         except Exception:
             pass
 
@@ -102,6 +103,7 @@ def save_state():
             "weekly_reports": agent_state["weekly_reports"][-12:],
             "agent_scores": agent_state["agent_scores"],
             "forecasts": agent_state["forecasts"],
+            "predictive": agent_state.get("predictive"),
         }, f, default=str)
 
 
@@ -347,6 +349,60 @@ async def run_scheduled_indexing():
         agent_state["running_task"] = None
 
 
+
+# ── Scheduled upgrade functions ─────────────────────────────────────
+
+async def run_predictive_analysis():
+    """Run comprehensive predictive analytics."""
+    try:
+        from predictive_analytics import (
+            forecast_traffic as pred_forecast,
+            detect_multi_metric_anomalies,
+            calculate_content_roi,
+            ai_generate_insights,
+        )
+        await log_message("info", "Starting predictive analytics")
+
+        # Forecast
+        history = agent_state.get("traffic_history", [])
+        forecast = pred_forecast(history)
+
+        # Multi-metric anomalies
+        metrics = {"traffic": [], "engagement": [], "seo_scores": [], "page_speed": []}
+        for h in history[-30:]:
+            metrics["traffic"].append(h.get("views_today", h.get("views_day", 0)))
+        perf = agent_state.get("performance")
+        if perf and perf.get("results"):
+            for r in perf["results"][-30:]:
+                metrics["page_speed"].append(r.get("response_time_ms", 0))
+        anomalies = detect_multi_metric_anomalies(metrics)
+
+        # Content ROI
+        top_pages = agent_state.get("traffic", {}).get("top_pages", [])
+        content_roi = calculate_content_roi(top_pages)
+
+        # AI insights
+        summary_metrics = {
+            "traffic_views": agent_state.get("traffic", {}).get("views_week", 0),
+            "anomaly_count": len(anomalies),
+            "top_content_count": len(content_roi),
+        }
+        insights = await ai_generate_insights(summary_metrics, anomalies)
+
+        agent_state["predictive"] = {
+            "forecast": forecast,
+            "anomalies": anomalies,
+            "content_roi": content_roi,
+            "insights": insights or [],
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+        }
+        save_state()
+        await log_message("info", f"Predictive analytics complete: {len(anomalies)} anomalies, {len(content_roi)} ROI entries")
+    except Exception as e:
+        logger.error(f"Predictive analytics failed: {e}")
+        await log_message("error", f"Predictive analytics failed: {e}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     load_state()
@@ -356,6 +412,8 @@ async def lifespan(app: FastAPI):
     # Phase 2D scheduled jobs
     scheduler.add_job(run_weekly_report, "cron", day_of_week="sun", hour="8", id="weekly_report")
     scheduler.add_job(run_agent_scoring, "interval", hours=4, id="agent_scoring")
+    # Upgrade module scheduled jobs
+    scheduler.add_job(run_predictive_analysis, "interval", hours=6, id="predictive_analytics")
     scheduler.start()
     await send_heartbeat()
     await log_message("info", "Analytics Agent started (Phase 2D)")
@@ -715,3 +773,45 @@ async def analytics_dashboard():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=settings.API_PORT, reload=False)
+
+
+# ── AI-Powered Upgrade Endpoints ─────────────────────────────────────
+
+@app.get("/api/predictive/forecast")
+async def get_traffic_forecast():
+    """Get AI traffic forecast."""
+    from predictive_analytics import forecast_traffic
+    history = agent_state.get("traffic_history", [])
+    forecast = forecast_traffic(history)
+    return forecast
+
+
+@app.get("/api/predictive/anomalies")
+async def get_multi_anomalies():
+    """Detect multi-metric anomalies."""
+    from predictive_analytics import detect_multi_metric_anomalies
+    metrics = {"traffic": [], "engagement": [], "seo_scores": [], "page_speed": []}
+    for h in agent_state.get("traffic_history", [])[-30:]:
+        metrics["traffic"].append(h.get("views_day", 0))
+    anomalies = detect_multi_metric_anomalies(metrics)
+    return {"anomalies": anomalies}
+
+
+@app.get("/api/predictive/content-roi")
+async def get_content_roi():
+    """Calculate content ROI scores."""
+    from predictive_analytics import calculate_content_roi
+    pages = agent_state.get("traffic", {}).get("top_pages", [])
+    roi = calculate_content_roi(pages)
+    return {"content_roi": roi}
+
+
+@app.post("/api/predictive/insights")
+async def generate_insights():
+    """Generate AI-powered insights."""
+    from predictive_analytics import ai_generate_insights, detect_multi_metric_anomalies
+    metrics = {"traffic_views": agent_state.get("traffic", {}).get("views_week", 0), "pages_count": len(agent_state.get("latest_audit", {}).get("pages", []) if isinstance(agent_state.get("latest_audit"), dict) else [])}
+    anomalies = detect_multi_metric_anomalies({"traffic": [], "engagement": [], "seo_scores": [], "page_speed": []})
+    insights = await ai_generate_insights(metrics, anomalies)
+    return {"insights": insights or []}
+
