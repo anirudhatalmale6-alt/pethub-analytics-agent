@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PetHub Analytics Agent</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0b0f1a;color:#e2e8f0;min-height:100vh}
+.header{background:linear-gradient(135deg,#131929,#0b0f1a);border-bottom:1px solid #1e2740;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:22px;font-weight:700;color:#f1f5f9}
+.header h1 span{background:linear-gradient(135deg,#818cf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header .controls{display:flex;gap:8px;align-items:center}
+.back-link{color:#818cf8;text-decoration:none;font-size:13px;margin-right:16px}
+.back-link:hover{text-decoration:underline}
+.container{max-width:1400px;margin:0 auto;padding:20px}
+
+/* Stat cards */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:linear-gradient(135deg,#131929,#1a2035);border:1px solid #1e2740;border-radius:12px;padding:20px;transition:border-color .2s}
+.stat-card:hover{border-color:#818cf8}
+.stat-card .label{font-size:12px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.stat-card .value{font-size:28px;font-weight:700;color:#f1f5f9}
+.stat-card .value.purple{color:#a78bfa}
+.stat-card .value.blue{color:#60a5fa}
+.stat-card .value.green{color:#34d399}
+.stat-card .value.yellow{color:#fbbf24}
+.stat-card .value.red{color:#f87171}
+.stat-card .value.cyan{color:#22d3ee}
+.stat-card .sub{font-size:11px;color:#64748b;margin-top:4px}
+
+/* Buttons */
+.btn{padding:8px 18px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .2s}
+.btn-primary{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff}
+.btn-primary:hover{background:linear-gradient(135deg,#4f46e5,#7c3aed)}
+.btn-primary:disabled{background:#1e2740;color:#64748b;cursor:not-allowed}
+.btn-secondary{background:#1e2740;color:#a78bfa;border:1px solid #2d3a55}
+.btn-secondary:hover{background:#2d3a55}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;margin-bottom:20px;background:#131929;padding:4px;border-radius:10px;width:fit-content;flex-wrap:wrap}
+.tab{padding:8px 20px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:500;color:#94a3b8;background:transparent;transition:all .2s}
+.tab.active{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff}
+.tab:hover:not(.active){color:#e2e8f0}
+.panel{display:none}
+.panel.active{display:block}
+
+/* Section */
+.section{margin-bottom:24px}
+.section h2{font-size:18px;font-weight:600;color:#f1f5f9;margin-bottom:16px}
+
+/* Table */
+.results-table{width:100%;border-collapse:collapse;background:#131929;border:1px solid #1e2740;border-radius:12px;overflow:hidden}
+.results-table th{text-align:left;padding:12px;font-size:12px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #1e2740;background:#0b0f1a;cursor:pointer;user-select:none}
+.results-table th:hover{color:#a78bfa}
+.results-table td{padding:12px;font-size:13px;border-bottom:1px solid #131929;color:#e2e8f0}
+.results-table tr:hover td{background:rgba(99,102,241,.05)}
+
+/* Badges */
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700}
+.badge.good{background:rgba(52,211,153,.15);color:#34d399}
+.badge.warning{background:rgba(251,191,36,.15);color:#fbbf24}
+.badge.critical{background:rgba(248,113,113,.15);color:#f87171}
+.badge.yes{background:rgba(52,211,153,.15);color:#34d399}
+.badge.no{background:rgba(248,113,113,.15);color:#f87171}
+.badge.stale{background:rgba(248,113,113,.12);color:#f87171}
+.badge.fresh{background:rgba(52,211,153,.12);color:#34d399}
+
+/* Issue tag */
+.issue-tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;margin:2px;background:rgba(248,113,113,.12);color:#f87171}
+
+/* Chart containers */
+.chart-card{background:#131929;border:1px solid #1e2740;border-radius:12px;padding:20px;margin-bottom:20px}
+.chart-card h3{font-size:15px;font-weight:600;color:#f1f5f9;margin-bottom:12px}
+.chart-wrapper{position:relative;height:250px}
+
+/* Running banner */
+.task-running{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.3);border-radius:12px;padding:20px;text-align:center;margin-bottom:24px}
+.task-running .spinner{display:inline-block;width:20px;height:20px;border:3px solid #1e2740;border-top-color:#818cf8;border-radius:50%;animation:spin 1s linear infinite;margin-right:10px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Empty state */
+.empty{text-align:center;padding:60px;color:#64748b;font-size:14px}
+
+/* Two-col layout */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:900px){.grid-2{grid-template-columns:1fr}}
+
+/* Responsive */
+@media(max-width:600px){
+  .header{flex-direction:column;gap:12px;text-align:center}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .tabs{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="display:flex;align-items:center;gap:16px">
+    <a href="/agents/" class="back-link">Back to Manager</a>
+    <h1><span>Analytics</span> Agent</h1>
+  </div>
+  <div class="controls">
+    <span id="status-text" style="font-size:13px;color:#94a3b8">Loading...</span>
+    <button class="btn btn-secondary" id="indexing-btn" onclick="runIndexing()">Check Indexing</button>
+    <button class="btn btn-primary" id="run-btn" onclick="runCollection()">Collect Data</button>
+  </div>
+</div>
+
+<div class="container">
+  <div id="running-banner" class="task-running" style="display:none">
+    <span class="spinner"></span>
+    <span id="running-text" style="font-size:14px;color:#818cf8">Task running...</span>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card">
+      <div class="label">Weekly Views</div>
+      <div class="value purple" id="s-views-week">-</div>
+      <div class="sub" id="s-views-today">Today: -</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Weekly Visitors</div>
+      <div class="value blue" id="s-visitors-week">-</div>
+      <div class="sub" id="s-visitors-today">Today: -</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Total Pages</div>
+      <div class="value cyan" id="s-total-pages">-</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Pages Indexed</div>
+      <div class="value green" id="s-indexed">-</div>
+      <div class="sub" id="s-indexed-pct">-</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Avg Response Time</div>
+      <div class="value yellow" id="s-response-time">-</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Last Collection</div>
+      <div class="value blue" id="s-last" style="font-size:16px">-</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('traffic',this)">Traffic</button>
+    <button class="tab" onclick="showTab('indexing',this)">Indexing</button>
+    <button class="tab" onclick="showTab('performance',this)">Performance</button>
+    <button class="tab" onclick="showTab('freshness',this)">Freshness</button>
+    <button class="tab" onclick="showTab('history',this)">History</button>
+  </div>
+
+  <!-- Traffic Panel -->
+  <div id="traffic" class="panel active">
+    <div class="grid-2">
+      <div class="chart-card">
+        <h3>Traffic Trend</h3>
+        <div class="chart-wrapper"><canvas id="traffic-chart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Page Views Distribution</h3>
+        <div class="chart-wrapper"><canvas id="pages-chart"></canvas></div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="section">
+        <h2>Top Pages</h2>
+        <table class="results-table" id="top-pages-table">
+          <thead><tr><th>Page</th><th>Views</th></tr></thead>
+          <tbody id="top-pages-body"></tbody>
+        </table>
+      </div>
+      <div class="section">
+        <h2>Referrers</h2>
+        <table class="results-table" id="referrers-table">
+          <thead><tr><th>Source</th><th>Views</th></tr></thead>
+          <tbody id="referrers-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="section">
+      <h2>Search Terms</h2>
+      <table class="results-table" id="search-table">
+        <thead><tr><th>Term</th><th>Views</th></tr></thead>
+        <tbody id="search-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Indexing Panel -->
+  <div id="indexing" class="panel">
+    <div class="grid-2" style="margin-bottom:20px">
+      <div class="chart-card">
+        <h3>Indexing Overview</h3>
+        <div class="chart-wrapper"><canvas id="indexing-chart"></canvas></div>
+      </div>
+      <div id="indexing-summary" class="chart-card">
+        <h3>Summary</h3>
+        <div id="indexing-summary-content" style="padding:20px;color:#94a3b8">Loading...</div>
+      </div>
+    </div>
+    <div class="section">
+      <h2>Page Indexing Status</h2>
+      <table class="results-table">
+        <thead><tr><th>Page</th><th>Status</th><th>Live</th><th>Indexable</th><th>In Sitemap</th><th>Canonical</th><th>Issues</th></tr></thead>
+        <tbody id="indexing-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Performance Panel -->
+  <div id="performance" class="panel">
+    <div class="chart-card" style="margin-bottom:20px">
+      <h3>Response Times</h3>
+      <div class="chart-wrapper"><canvas id="perf-chart"></canvas></div>
+    </div>
+    <div class="section">
+      <h2>Page Performance</h2>
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th onclick="sortPerf('title')">Page</th>
+            <th onclick="sortPerf('response_time_ms')">Response Time</th>
+            <th onclick="sortPerf('ttfb_ms')">TTFB</th>
+            <th onclick="sortPerf('page_size_bytes')">Page Size</th>
+            <th>Gzip</th>
+            <th>Cache</th>
+            <th onclick="sortPerf('grade')">Grade</th>
+            <th>Issues</th>
+          </tr>
+        </thead>
+        <tbody id="perf-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Freshness Panel -->
+  <div id="freshness" class="panel">
+    <div class="grid-2" style="margin-bottom:20px">
+      <div class="chart-card">
+        <h3>Content Freshness</h3>
+        <div class="chart-wrapper"><canvas id="freshness-chart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Age Distribution</h3>
+        <div class="chart-wrapper"><canvas id="age-chart"></canvas></div>
+      </div>
+    </div>
+    <div class="section">
+      <h2>Content Age</h2>
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Page</th>
+            <th>Type</th>
+            <th>Published</th>
+            <th>Last Modified</th>
+            <th>Days Since Update</th>
+            <th>Words</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="freshness-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- History Panel -->
+  <div id="history" class="panel">
+    <div class="chart-card" style="margin-bottom:20px">
+      <h3>Collection History</h3>
+      <div class="chart-wrapper"><canvas id="history-chart"></canvas></div>
+    </div>
+    <div class="section">
+      <h2>Activity Log</h2>
+      <table class="results-table">
+        <thead><tr><th>Date</th><th>Type</th><th>Pages</th><th>Details</th></tr></thead>
+        <tbody id="history-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const base = window.location.pathname.replace(/\/$/, '');
+const API = base + '/api';
+let pollInterval = null;
+let charts = {};
+let perfData = [];
+let perfSortField = 'response_time_ms';
+let perfSortAsc = false;
+
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function timeAgo(d) {
+  if (!d) return 'Never';
+  const s = Math.floor((Date.now() - new Date(d)) / 1000);
+  if (s < 60) return s + 's ago';
+  if (s < 3600) return Math.floor(s / 60) + 'm ago';
+  if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+  return Math.floor(s / 86400) + 'd ago';
+}
+
+function fmtDate(d) {
+  if (!d) return '-';
+  return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+async function api(path) {
+  const r = await fetch(API + path);
+  return r.json();
+}
+
+// ── Status ──
+async function loadStatus() {
+  const d = await api('/status');
+  const running = d.status === 'running';
+  document.getElementById('status-text').textContent = running ? 'Task running...' : 'Idle';
+  document.getElementById('running-banner').style.display = running ? 'block' : 'none';
+  if (running) {
+    document.getElementById('running-text').textContent =
+      d.running_task === 'indexing' ? 'Indexing check in progress...' : 'Data collection in progress...';
+  }
+  document.getElementById('run-btn').disabled = running;
+  document.getElementById('indexing-btn').disabled = running;
+  document.getElementById('s-total-pages').textContent = d.total_pages || '-';
+  document.getElementById('s-indexed').textContent = d.indexable_count || '-';
+  if (d.total_pages > 0 && d.indexable_count > 0) {
+    document.getElementById('s-indexed-pct').textContent = Math.round(d.indexable_count / d.total_pages * 100) + '% of pages';
+  }
+  document.getElementById('s-response-time').textContent = d.avg_response_time_ms ? d.avg_response_time_ms + 'ms' : '-';
+  document.getElementById('s-last').textContent = d.last_collection ? timeAgo(d.last_collection) : 'Never';
+
+  if (running && !pollInterval) {
+    pollInterval = setInterval(loadAll, 5000);
+  } else if (!running && pollInterval) {
+    clearInterval(pollInterval);
+    pollInterval = null;
+  }
+}
+
+// ── Traffic ──
+async function loadTraffic() {
+  const d = await api('/traffic');
+  document.getElementById('s-views-week').textContent = (d.views_week || 0).toLocaleString();
+  document.getElementById('s-views-today').textContent = 'Today: ' + (d.views_today || 0).toLocaleString();
+  document.getElementById('s-visitors-week').textContent = (d.visitors_week || 0).toLocaleString();
+  document.getElementById('s-visitors-today').textContent = 'Today: ' + (d.visitors_today || 0).toLocaleString();
+
+  // Top pages table
+  const tpBody = document.getElementById('top-pages-body');
+  if (d.top_pages && d.top_pages.length) {
+    tpBody.innerHTML = d.top_pages.map(p => `<tr>
+      <td><a href="${p.url}" target="_blank" style="color:#818cf8;text-decoration:none">${p.title || p.url}</a></td>
+      <td style="font-weight:600">${(p.views || 0).toLocaleString()}</td>
+    </tr>`).join('');
+  } else {
+    tpBody.innerHTML = '<tr><td colspan="2" style="text-align:center;color:#64748b;padding:20px">No top pages data available yet</td></tr>';
+  }
+
+  // Referrers table
+  const refBody = document.getElementById('referrers-body');
+  if (d.referrers && d.referrers.length) {
+    refBody.innerHTML = d.referrers.map(r => `<tr>
+      <td>${r.name}</td>
+      <td style="font-weight:600">${(r.views || 0).toLocaleString()}</td>
+    </tr>`).join('');
+  } else {
+    refBody.innerHTML = '<tr><td colspan="2" style="text-align:center;color:#64748b;padding:20px">No referrer data available yet</td></tr>';
+  }
+
+  // Search terms table
+  const srchBody = document.getElementById('search-body');
+  if (d.search_terms && d.search_terms.length) {
+    srchBody.innerHTML = d.search_terms.map(t => `<tr>
+      <td>${t.term}</td>
+      <td style="font-weight:600">${(t.views || 0).toLocaleString()}</td>
+    </tr>`).join('');
+  } else {
+    srchBody.innerHTML = '<tr><td colspan="2" style="text-align:center;color:#64748b;padding:20px">No search terms data available yet</td></tr>';
+  }
+
+  // Traffic trend chart
+  const hist = d.history || [];
+  if (hist.length > 0) {
+    const labels = hist.map(h => {
+      const dt = new Date(h.date);
+      return (dt.getMonth() + 1) + '/' + dt.getDate();
+    });
+    const views = hist.map(h => h.views_today || h.views_week || 0);
+    const visitors = hist.map(h => h.visitors_today || 0);
+
+    if (charts.traffic) charts.traffic.destroy();
+    charts.traffic = new Chart(document.getElementById('traffic-chart'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Views',
+            data: views,
+            borderColor: '#a78bfa',
+            backgroundColor: 'rgba(167,139,250,0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 3,
+          },
+          {
+            label: 'Visitors',
+            data: visitors,
+            borderColor: '#60a5fa',
+            backgroundColor: 'rgba(96,165,250,0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 3,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: '#94a3b8' } } },
+        scales: {
+          x: { ticks: { color: '#64748b' }, grid: { color: '#1e2740' } },
+          y: { ticks: { color: '#64748b' }, grid: { color: '#1e2740' }, beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  // Top pages chart
+  if (d.top_pages && d.top_pages.length) {
+    if (charts.pages) charts.pages.destroy();
+    charts.pages = new Chart(document.getElementById('pages-chart'), {
+      type: 'bar',
+      data: {
+        labels: d.top_pages.map(p => (p.title || p.url || '').substring(0, 25)),
+        datasets: [{
+          label: 'Views',
+          data: d.top_pages.map(p => p.views || 0),
+          backgroundColor: [
+            'rgba(129,140,248,0.7)', 'rgba(167,139,250,0.7)', 'rgba(96,165,250,0.7)',
+            'rgba(52,211,153,0.7)', 'rgba(251,191,36,0.7)', 'rgba(248,113,113,0.7)',
+            'rgba(34,211,238,0.7)', 'rgba(244,114,182,0.7)', 'rgba(163,230,53,0.7)',
+            'rgba(253,186,116,0.7)'
+          ],
+          borderRadius: 6,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: 'y',
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#64748b' }, grid: { color: '#1e2740' }, beginAtZero: true },
+          y: { ticks: { color: '#94a3b8', font: { size: 11 } }, grid: { display: false } }
+        }
+      }
+    });
+  }
+}
+
+// ── Indexing ──
+async function loadIndexing() {
+  const d = await api('/indexing');
+  const body = document.getElementById('indexing-body');
+
+  if (!d.results || !d.results.length) {
+    body.innerHTML = '<tr><td colspan="7" class="empty">No indexing data yet. Click "Check Indexing" to start.</td></tr>';
+    document.getElementById('indexing-summary-content').innerHTML = '<p style="color:#64748b">No data yet</p>';
+    return;
+  }
+
+  // Summary
+  const sumEl = document.getElementById('indexing-summary-content');
+  sumEl.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="background:#0b0f1a;border-radius:8px;padding:12px">
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:4px">Total Pages</div>
+        <div style="font-size:24px;font-weight:700;color:#f1f5f9">${d.total_pages}</div>
+      </div>
+      <div style="background:#0b0f1a;border-radius:8px;padding:12px">
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:4px">Indexable</div>
+        <div style="font-size:24px;font-weight:700;color:#34d399">${d.indexable_count}</div>
+      </div>
+      <div style="background:#0b0f1a;border-radius:8px;padding:12px">
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:4px">Not Indexable</div>
+        <div style="font-size:24px;font-weight:700;color:#f87171">${d.not_indexable_count}</div>
+      </div>
+      <div style="background:#0b0f1a;border-radius:8px;padding:12px">
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:4px">Sitemap URLs</div>
+        <div style="font-size:24px;font-weight:700;color:#60a5fa">${d.sitemap_url_count}</div>
+      </div>
+      <div style="background:#0b0f1a;border-radius:8px;padding:12px;grid-column:span 2">
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:4px">Sitemap</div>
+        <div style="font-size:14px;color:${d.sitemap_accessible ? '#34d399' : '#f87171'}">${d.sitemap_accessible ? 'Accessible' : 'Not accessible'}</div>
+      </div>
+    </div>
+  `;
+
+  // Chart
+  if (charts.indexing) charts.indexing.destroy();
+  charts.indexing = new Chart(document.getElementById('indexing-chart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Indexable', 'Not Indexable'],
+      datasets: [{
+        data: [d.indexable_count, d.not_indexable_count],
+        backgroundColor: ['rgba(52,211,153,0.8)', 'rgba(248,113,113,0.8)'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 16 } }
+      }
+    }
+  });
+
+  // Table
+  body.innerHTML = d.results.map(r => `<tr>
+    <td>
+      <div style="font-weight:600">${r.title}</div>
+      <div style="font-size:11px;color:#64748b">${r.url}</div>
+    </td>
+    <td><span class="badge ${r.status_code === 200 ? 'good' : 'critical'}">${r.status_code}</span></td>
+    <td><span class="badge ${r.is_live ? 'yes' : 'no'}">${r.is_live ? 'Yes' : 'No'}</span></td>
+    <td><span class="badge ${r.is_indexable ? 'yes' : 'no'}">${r.is_indexable ? 'Yes' : 'No'}</span></td>
+    <td><span class="badge ${r.in_sitemap ? 'yes' : 'no'}">${r.in_sitemap ? 'Yes' : 'No'}</span></td>
+    <td><span class="badge ${r.has_canonical ? 'yes' : 'no'}">${r.has_canonical ? 'Yes' : 'No'}</span></td>
+    <td>${r.issues.length ? r.issues.map(i => '<span class="issue-tag">' + i + '</span>').join(' ') : '<span style="color:#34d399">None</span>'}</td>
+  </tr>`).join('');
+}
+
+// ── Performance ──
+async function loadPerformance() {
+  const d = await api('/performance');
+  perfData = d.results || [];
+  renderPerfTable();
+
+  if (!perfData.length) return;
+
+  // Response time bar chart
+  const sorted = [...perfData].sort((a, b) => b.response_time_ms - a.response_time_ms).slice(0, 15);
+  if (charts.perf) charts.perf.destroy();
+  charts.perf = new Chart(document.getElementById('perf-chart'), {
+    type: 'bar',
+    data: {
+      labels: sorted.map(r => (r.title || '').substring(0, 30)),
+      datasets: [
+        {
+          label: 'Response Time (ms)',
+          data: sorted.map(r => r.response_time_ms),
+          backgroundColor: sorted.map(r =>
+            r.grade === 'good' ? 'rgba(52,211,153,0.7)' :
+            r.grade === 'warning' ? 'rgba(251,191,36,0.7)' : 'rgba(248,113,113,0.7)'
+          ),
+          borderRadius: 4,
+        },
+        {
+          label: 'TTFB (ms)',
+          data: sorted.map(r => r.ttfb_ms),
+          backgroundColor: 'rgba(96,165,250,0.5)',
+          borderRadius: 4,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#94a3b8' } } },
+      scales: {
+        x: { ticks: { color: '#64748b', font: { size: 10 }, maxRotation: 45 }, grid: { color: '#1e2740' } },
+        y: { ticks: { color: '#64748b' }, grid: { color: '#1e2740' }, beginAtZero: true }
+      }
+    }
+  });
+}
+
+function sortPerf(field) {
+  if (perfSortField === field) {
+    perfSortAsc = !perfSortAsc;
+  } else {
+    perfSortField = field;
+    perfSortAsc = field === 'title';
+  }
+  renderPerfTable();
+}
+
+function renderPerfTable() {
+  const body = document.getElementById('perf-body');
+  if (!perfData.length) {
+    body.innerHTML = '<tr><td colspan="8" class="empty">No performance data yet. Click "Collect Data" to start.</td></tr>';
+    return;
+  }
+
+  const sorted = [...perfData].sort((a, b) => {
+    let va = a[perfSortField], vb = b[perfSortField];
+    if (typeof va === 'string') {
+      return perfSortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+    }
+    return perfSortAsc ? va - vb : vb - va;
+  });
+
+  body.innerHTML = sorted.map(r => `<tr>
+    <td>
+      <div style="font-weight:600">${r.title}</div>
+      <div style="font-size:11px;color:#64748b">${r.url}</div>
+    </td>
+    <td style="font-weight:600;color:${r.grade === 'good' ? '#34d399' : r.grade === 'warning' ? '#fbbf24' : '#f87171'}">${r.response_time_ms}ms</td>
+    <td>${r.ttfb_ms}ms</td>
+    <td>${r.page_size_display}</td>
+    <td><span class="badge ${r.is_gzipped ? 'yes' : 'no'}">${r.is_gzipped ? 'Yes' : 'No'}</span></td>
+    <td><span class="badge ${r.has_cache_headers ? 'yes' : 'no'}">${r.has_cache_headers ? 'Yes' : 'No'}</span></td>
+    <td><span class="badge ${r.grade}">${r.grade.charAt(0).toUpperCase() + r.grade.slice(1)}</span></td>
+    <td>${r.issues.length ? r.issues.map(i => '<span class="issue-tag">' + i + '</span>').join(' ') : '<span style="color:#34d399">OK</span>'}</td>
+  </tr>`).join('');
+}
+
+// ── Freshness ──
+async function loadFreshness() {
+  const d = await api('/freshness');
+  const body = document.getElementById('freshness-body');
+
+  if (!d.results || !d.results.length) {
+    body.innerHTML = '<tr><td colspan="7" class="empty">No freshness data yet. Click "Collect Data" to start.</td></tr>';
+    return;
+  }
+
+  // Freshness donut
+  if (charts.freshness) charts.freshness.destroy();
+  charts.freshness = new Chart(document.getElementById('freshness-chart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Fresh', 'Stale (30+ days)'],
+      datasets: [{
+        data: [d.fresh_count, d.stale_count],
+        backgroundColor: ['rgba(52,211,153,0.8)', 'rgba(248,113,113,0.8)'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 16 } }
+      }
+    }
+  });
+
+  // Age distribution chart
+  const buckets = { '0-7d': 0, '8-14d': 0, '15-30d': 0, '31-60d': 0, '60+d': 0 };
+  d.results.forEach(r => {
+    const days = r.days_since_modified;
+    if (days < 0) return;
+    if (days <= 7) buckets['0-7d']++;
+    else if (days <= 14) buckets['8-14d']++;
+    else if (days <= 30) buckets['15-30d']++;
+    else if (days <= 60) buckets['31-60d']++;
+    else buckets['60+d']++;
+  });
+
+  if (charts.age) charts.age.destroy();
+  charts.age = new Chart(document.getElementById('age-chart'), {
+    type: 'bar',
+    data: {
+      labels: Object.keys(buckets),
+      datasets: [{
+        label: 'Pages',
+        data: Object.values(buckets),
+        backgroundColor: ['rgba(52,211,153,0.7)', 'rgba(96,165,250,0.7)', 'rgba(167,139,250,0.7)', 'rgba(251,191,36,0.7)', 'rgba(248,113,113,0.7)'],
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e2740' } },
+        y: { ticks: { color: '#64748b', stepSize: 1 }, grid: { color: '#1e2740' }, beginAtZero: true }
+      }
+    }
+  });
+
+  // Table
+  body.innerHTML = d.results.map(r => `<tr>
+    <td>
+      <div style="font-weight:600">${r.title}</div>
+      <div style="font-size:11px;color:#64748b">${r.url}</div>
+    </td>
+    <td><span style="color:#94a3b8">${r.type}</span></td>
+    <td>${fmtDate(r.date_published)}</td>
+    <td>${fmtDate(r.date_modified)}</td>
+    <td style="font-weight:600;color:${r.is_stale ? '#f87171' : '#34d399'}">${r.days_since_modified >= 0 ? r.days_since_modified + 'd' : '-'}</td>
+    <td>${(r.word_count || 0).toLocaleString()}</td>
+    <td><span class="badge ${r.is_stale ? 'stale' : 'fresh'}">${r.is_stale ? 'Stale' : 'Fresh'}</span></td>
+  </tr>`).join('');
+}
+
+// ── History ──
+async function loadHistory() {
+  const d = await api('/history');
+  const body = document.getElementById('history-body');
+  const hist = d.history || [];
+  const tHist = d.traffic_history || [];
+
+  if (!hist.length && !tHist.length) {
+    body.innerHTML = '<tr><td colspan="4" class="empty">No history yet</td></tr>';
+    return;
+  }
+
+  // History chart showing traffic trend
+  if (tHist.length > 0) {
+    if (charts.history) charts.history.destroy();
+    charts.history = new Chart(document.getElementById('history-chart'), {
+      type: 'line',
+      data: {
+        labels: tHist.map(h => {
+          const dt = new Date(h.date);
+          return (dt.getMonth() + 1) + '/' + dt.getDate();
+        }),
+        datasets: [{
+          label: 'Weekly Views',
+          data: tHist.map(h => h.views_week || 0),
+          borderColor: '#a78bfa',
+          backgroundColor: 'rgba(167,139,250,0.1)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 3,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: '#94a3b8' } } },
+        scales: {
+          x: { ticks: { color: '#64748b' }, grid: { color: '#1e2740' } },
+          y: { ticks: { color: '#64748b' }, grid: { color: '#1e2740' }, beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  // Table
+  body.innerHTML = hist.slice().reverse().map(h => `<tr>
+    <td>${new Date(h.date).toLocaleString()}</td>
+    <td><span class="badge ${h.type === 'collection' ? 'good' : 'warning'}">${h.type}</span></td>
+    <td>${h.total_pages || '-'}</td>
+    <td>${h.type === 'collection'
+      ? 'Views: ' + (h.views_week || 0) + ', Avg: ' + (h.avg_response_time_ms || 0) + 'ms'
+      : 'Indexed: ' + (h.indexable_count || 0) + ', Issues: ' + (h.issues || 0)
+    }</td>
+  </tr>`).join('');
+}
+
+// ── Actions ──
+async function runCollection() {
+  document.getElementById('run-btn').disabled = true;
+  await fetch(API + '/collect/run', { method: 'POST' });
+  setTimeout(loadAll, 2000);
+}
+
+async function runIndexing() {
+  document.getElementById('indexing-btn').disabled = true;
+  await fetch(API + '/indexing/run', { method: 'POST' });
+  setTimeout(loadAll, 2000);
+}
+
+// ── Main load ──
+async function loadAll() {
+  try {
+    await loadStatus();
+    await loadTraffic();
+    await loadIndexing();
+    await loadPerformance();
+    await loadFreshness();
+    await loadHistory();
+  } catch (e) {
+    console.error('Load failed:', e);
+  }
+}
+
+loadAll();
+setInterval(loadAll, 60000);
+setInterval(loadStatus, 15000);
+</script>
+</body>
+</html>
